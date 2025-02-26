@@ -75,6 +75,16 @@ if uploaded_file:
     oldest_subscriptions = df.sort_values("Subscription Date").head(10)
     st.dataframe(oldest_subscriptions[["First Name", "Last Name", "Company", "Subscription Date"]])
     
+    # Replacing duplicate "Top 10 Companies" chart with new feature
+    st.subheader("Subscription Growth Rate")
+    df["Subscription Month-Year"] = df["Subscription Date"].dt.to_period("M")
+    subscription_growth = df.groupby("Subscription Month-Year").size()
+    fig, ax = plt.subplots()
+    subscription_growth.plot(kind="line", marker="o", ax=ax)
+    ax.set_xlabel("Month-Year")
+    ax.set_ylabel("Number of New Subscriptions")
+    plt.xticks(rotation=45)
+    st.pyplot(fig)
     
     # Most common subscription months
     st.subheader("Most Common Subscription Months")
