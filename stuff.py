@@ -40,7 +40,8 @@ if uploaded_file:
     sns.barplot(x=country_counts.index, y=country_counts.values, ax=ax)
     ax.set_xlabel("Country")
     ax.set_ylabel("Number of Customers")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+    ax.set_xticks(range(len(country_counts.index)))  # Set tick positions
+    ax.set_xticklabels(country_counts.index, rotation=45, ha="right")  # Set tick labels
     st.pyplot(fig)
     
     # Pie chart for country distribution
@@ -68,7 +69,8 @@ if uploaded_file:
     sns.barplot(x=top_companies.index, y=top_companies.values, ax=ax)
     ax.set_xlabel("Company")
     ax.set_ylabel("Number of Customers")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+    ax.set_xticks(range(len(top_companies.index)))  # Set tick positions
+    ax.set_xticklabels(top_companies.index, rotation=45, ha="right")  # Set tick labels
     st.pyplot(fig)
     
     st.subheader("Customers with the Longest Subscription")
@@ -94,8 +96,8 @@ if uploaded_file:
     sns.barplot(x=month_counts.index, y=month_counts.values, ax=ax)
     ax.set_xlabel("Month")
     ax.set_ylabel("Number of Subscriptions")
-    ax.set_xticks(range(12))
-    ax.set_xticklabels(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+    ax.set_xticks(range(12))  # Set tick positions
+    ax.set_xticklabels(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])  # Set tick labels
     st.pyplot(fig)
     
     # Customers with multiple phone numbers
