@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # File uploader
 st.sidebar.header("Upload CSV File")
@@ -16,13 +17,16 @@ if uploaded_file:
     # Sidebar for filters
     st.sidebar.header("Filters")
     search_query = st.sidebar.text_input("Search (Name, Email, Company)")
-    selected_country = st.sidebar.selectbox("Filter by Country", ["All"] + sorted(df["Country"].dropna().unique().tolist()))
+    selected_countries = st.sidebar.multiselect("Filter by Country", sorted(df["Country"].dropna().unique().tolist()))
+    sort_by = st.sidebar.selectbox("Sort by", ["Subscription Date", "Country", "Company"], index=0)
+    ascending_order = st.sidebar.checkbox("Ascending Order", value=True)
     
     # Apply filters
     if search_query:
         df = df[df.apply(lambda row: search_query.lower() in str(row.values).lower(), axis=1)]
-    if selected_country != "All":
-        df = df[df["Country"] == selected_country]
+    if selected_countries:
+        df = df[df["Country"].isin(selected_countries)]
+    df = df.sort_values(by=sort_by, ascending=ascending_order)
     
     # Display data
     st.title("Customer Data Analytics Dashboard")
@@ -30,12 +34,21 @@ if uploaded_file:
     st.dataframe(df.head(1000))
     
     # Country-wise distribution
-    st.subheader("Customer Distribution by Country")
-    country_counts = df["Country"].value_counts()
-    fig, ax = plt.subplots()
-    country_counts.plot(kind="bar", ax=ax)
+    st.subheader("Top 50 Customer Distribution by Country")
+    country_counts = df["Country"].value_counts().nlargest(50)
+    fig, ax = plt.subplots(figsize=(12, 6))
+    sns.barplot(x=country_counts.index, y=country_counts.values, ax=ax)
     ax.set_xlabel("Country")
     ax.set_ylabel("Number of Customers")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+    st.pyplot(fig)
+    
+    # Pie chart for country distribution
+    st.subheader("Top 10 Countries - Customer Distribution")
+    top_10_countries = df["Country"].value_counts().nlargest(10)
+    fig, ax = plt.subplots()
+    ax.pie(top_10_countries, labels=top_10_countries.index, autopct='%1.1f%%', startangle=90, colors=sns.color_palette("pastel"))
+    ax.axis("equal")
     st.pyplot(fig)
     
     # Subscription trends
