@@ -75,15 +75,6 @@ if uploaded_file:
     oldest_subscriptions = df.sort_values("Subscription Date").head(10)
     st.dataframe(oldest_subscriptions[["First Name", "Last Name", "Company", "Subscription Date"]])
     
-    # Customer distribution by Company (Top 10)
-    st.subheader("Top 10 Companies with Most Customers")
-    company_counts = df["Company"].value_counts().nlargest(10)
-    fig, ax = plt.subplots()
-    sns.barplot(x=company_counts.index, y=company_counts.values, ax=ax)
-    ax.set_xlabel("Company")
-    ax.set_ylabel("Number of Customers")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
-    st.pyplot(fig)
     
     # Most common subscription months
     st.subheader("Most Common Subscription Months")
