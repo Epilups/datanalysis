@@ -26,8 +26,8 @@ if uploaded_file:
     
     # Display data
     st.title("Customer Data Analytics Dashboard")
-    st.subheader("Filtered Data")
-    st.dataframe(df)
+    st.subheader("Filtered Data (Showing first 1000 rows)")
+    st.dataframe(df.head(1000))
     
     # Country-wise distribution
     st.subheader("Customer Distribution by Country")
